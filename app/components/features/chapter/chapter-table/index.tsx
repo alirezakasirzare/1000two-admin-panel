@@ -1,11 +1,18 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { EllipsisVerticalIcon } from "lucide-react";
 import { useState } from "react";
+
+import { chapterApi } from "~/api/chapter";
+import { confirm } from "~/components/common/dialog-confirmation";
+import { chapterKeys } from "~/lib/query-key";
+import type { Chapter } from "~/lib/types";
+import { ChapterForm } from "../chapter-form";
+
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "~/components/ui/dialog";
 import {
   DropdownMenu,
@@ -21,25 +28,46 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import type { Chapter } from "~/lib/types";
-import { ChapterForm } from "../chapter-form";
 
 // table row item component
 const TableItem = ({ chapter }: { chapter: Chapter }) => {
+  // dialog
   const [open, setOpen] = useState(false);
   const [dialogPurpose, setDialogPurpose] = useState<"view" | "edit">("view");
 
   const dialogTitle = dialogPurpose === "view" ? "نمایش فصل" : "ویرایش فصل";
 
+  // view
   const onViewClick = () => {
     setDialogPurpose("view");
     setOpen(true);
   };
+
+  // edit
   const onEditClick = () => {
     setDialogPurpose("edit");
     setOpen(true);
   };
 
+  // delete
+  const queryClient = useQueryClient();
+  const onDeleteClick = async () => {
+    console.log(chapter);
+    if (
+      await confirm({
+        onConfirm: chapterApi.delete.bind(null, chapter.id),
+      })
+    ) {
+      queryClient.invalidateQueries({
+        queryKey: chapterKeys.all,
+      });
+    }
+  };
+
+  // dialog events
+  const onDialogFormSuccess = () => {
+    setOpen(false);
+  };
   return (
     <TableRow>
       <TableCell>{chapter.name}</TableCell>
@@ -53,7 +81,7 @@ const TableItem = ({ chapter }: { chapter: Chapter }) => {
             <DropdownMenuContent>
               <DropdownMenuItem onClick={onViewClick}>نمایش</DropdownMenuItem>
               <DropdownMenuItem onClick={onEditClick}>ویرایش</DropdownMenuItem>
-              <DropdownMenuItem>حذف</DropdownMenuItem>
+              <DropdownMenuItem onClick={onDeleteClick}>حذف</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
@@ -61,7 +89,11 @@ const TableItem = ({ chapter }: { chapter: Chapter }) => {
             <DialogHeader>
               <DialogTitle>{dialogTitle}</DialogTitle>
             </DialogHeader>
-            <ChapterForm mode={dialogPurpose} initialValues={chapter} />
+            <ChapterForm
+              mode={dialogPurpose}
+              initialValues={chapter}
+              onSuccess={onDialogFormSuccess}
+            />
           </DialogContent>
         </Dialog>
       </TableCell>

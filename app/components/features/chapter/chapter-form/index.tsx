@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -17,6 +17,7 @@ import {
 } from "~/components/ui/form";
 import { Button } from "~/components/ui/button";
 import { chapterApi } from "~/api/chapter";
+import { chapterKeys } from "~/lib/query-key";
 
 // form schema
 const schema = z.object({
@@ -24,45 +25,62 @@ const schema = z.object({
   description: z.string().min(1),
 });
 
-// component props
-type Props = {
+// the component
+export const ChapterForm = ({
+  mode,
+  initialValues,
+  onSuccess,
+}: {
   mode: "add" | "edit" | "view";
   initialValues?: Chapter;
-};
+  onSuccess?: () => void;
+}) => {
+  // alias
+  const isView = mode === "view";
 
-// the component
-export const ChapterForm = (props: Props) => {
   // form state
-  const initValues = {
-    name: props.initialValues?.name ?? "",
-    description: props.initialValues?.description ?? "",
+  const formDefaultValues = {
+    name: initialValues?.name ?? "",
+    description: initialValues?.description ?? "",
   };
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-    values: initValues,
+    values: formDefaultValues,
   });
 
   // mutation
+  const queryClient = useQueryClient();
   const addMutation = useMutation({
     mutationFn: chapterApi.create,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: chapterKeys.all,
+      });
+
+      onSuccess?.();
+    },
   });
 
   const editMutation = useMutation({
-    mutationFn: chapterApi.edit.bind(null, ""),
+    mutationFn: chapterApi.edit.bind(null, initialValues?.id as string),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: chapterKeys.all,
+      });
+
+      onSuccess?.();
+    },
   });
 
   // submit
   const onSubmit = (values: z.infer<typeof schema>) => {
-    if (props.mode === "add") {
+    if (mode === "add") {
       addMutation.mutate(values);
-    } else if (props.mode === "edit") {
+    } else if (mode === "edit") {
       editMutation.mutate(values);
     }
   };
-
-  // alias
-  const isView = props.mode === "view";
 
   return (
     <Form {...form}>
@@ -100,7 +118,7 @@ export const ChapterForm = (props: Props) => {
         {/* btn */}
         {!isView && (
           <Button loading={addMutation.isPending || editMutation.isPending}>
-            {props.mode === "add" ? "اضافه کردن" : "ویرایش کردن"}
+            {mode === "add" ? "اضافه کردن" : "ویرایش کردن"}
           </Button>
         )}
       </form>

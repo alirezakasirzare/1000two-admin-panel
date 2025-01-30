@@ -3470,6 +3470,11 @@ object-inspect@^1.13.3:
   resolved "https://registry.yarnpkg.com/object-inspect/-/object-inspect-1.13.3.tgz#f14c183de51130243d6d18ae149375ff50ea488a"
   integrity sha512-kDCGIbxkDSXE3euJZZXzc6to7fCrKHNI/hSRQnRuQ+BWjFNzZwiFF8fj/6o2t2G9/jTj8PSIYTfCLelLZEeRpA==
 
+object-query-string@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/object-query-string/-/object-query-string-1.2.0.tgz#ba3183b3751b7a710558f584dff2a4c47deb7b97"
+  integrity sha512-alZUa1gg88HYP/cd1Cah+mjRUuh+6wy6uMRn7X8S9Dt7KFu/DwHjY7sI9m+2E2y3XU1Wv9YJKfZ3rCVL3RGBmA==
+
 on-finished@2.4.1:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/on-finished/-/on-finished-2.4.1.tgz#58c8c44116e54845ad57f14ab10b03533184ac3f"
@@ -3643,6 +3648,11 @@ postcss@^8.4.43, postcss@^8.4.47, postcss@^8.4.49, postcss@^8.5.1:
     picocolors "^1.1.1"
     source-map-js "^1.2.1"
 
+prettier-plugin-organize-imports@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/prettier-plugin-organize-imports/-/prettier-plugin-organize-imports-4.1.0.tgz#f3d3764046a8e7ba6491431158b9be6ffd83b90f"
+  integrity sha512-5aWRdCgv645xaa58X8lOxzZoiHAldAPChljr/MT0crXVOWTZ+Svl4hIWlz+niYSlO6ikE5UXkN1JrRvIP2ut0A==
+
 prettier@^2.7.1:
   version "2.8.8"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.8.tgz#e8c5d7e98a4305ffe3de2e1fc4aca1a71c28b1da"
@@ -3741,6 +3751,11 @@ raw-body@2.5.2:
     http-errors "2.0.0"
     iconv-lite "0.4.24"
     unpipe "1.0.0"
+
+react-confirm@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/react-confirm/-/react-confirm-0.3.0.tgz#e67ea02732a1437af24b6dd8afce7a8e9c660a31"
+  integrity sha512-xd14cjreB+ndQFqO2iZSMFRelf7MXya7dhGEyZh1km1oCeudQaF7VoIMAzSDLB4wrZiFS3KfGxeqZLnoxq6dwA==
 
 react-d3-tree@^3.6.2:
   version "3.6.2"

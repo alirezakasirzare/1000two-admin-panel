@@ -14,6 +14,13 @@ const basicApiRequest = axios.create({
 
 export const apiRequest = addAxiosDateTransformer(basicApiRequest);
 
+apiRequest.interceptors.request.use(async (request) => {
+  const promise = new Promise((resolve) => {
+    setTimeout(resolve, 1000);
+  });
+  await promise;
+  return request;
+});
 // global error manage
 apiRequest.interceptors.response.use(
   (response) => response,

@@ -9,19 +9,21 @@ export type BaseApiSuccess<T> = {
   data: T;
 };
 
+export type MetaPagination = {
+  isFirstPage: boolean;
+  isLastPage: boolean;
+  currentPage: number;
+  previousPage: null | number;
+  nextPage: null | number;
+  pageCount: number;
+  totalCount: number;
+};
+
 export type BaseApiPagination<T> = {
   success: true;
   data: {
     items: T[];
-    meta: {
-      isFirstPage: boolean;
-      isLastPage: boolean;
-      currentPage: number;
-      previousPage: null | number;
-      nextPage: null | number;
-      pageCount: number;
-      totalCount: number;
-    };
+    meta: MetaPagination;
   };
 };
 
@@ -31,4 +33,8 @@ export type Chapter = {
   description: string;
   createdAt: Date;
   updatedAt: Date;
+};
+
+export type PaginationQueryParams = {
+  page: number;
 };

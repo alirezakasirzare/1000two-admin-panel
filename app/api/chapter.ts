@@ -1,11 +1,19 @@
+import { queryString } from "object-query-string";
+
 import { apiRequest } from "~/lib/api-request";
-import type { BaseApiPagination, BaseApiSuccess, Chapter } from "~/lib/types";
+import type {
+  BaseApiPagination,
+  BaseApiSuccess,
+  Chapter,
+  PaginationQueryParams,
+} from "~/lib/types";
 
 // find all GET
-const getChaptersApi = async () => {
+const getChaptersApi = async (paginationParams: PaginationQueryParams) => {
+  const query = queryString(paginationParams);
   const {
     data: { data },
-  } = await apiRequest.get<BaseApiPagination<Chapter>>("chapter");
+  } = await apiRequest.get<BaseApiPagination<Chapter>>(`chapter?${query}`);
 
   return data;
 };
@@ -32,7 +40,16 @@ const editChapterApi = async (
 ) => {
   const {
     data: { data },
-  } = await apiRequest.post<BaseApiSuccess<Chapter>>(`chapter/${id}`, body);
+  } = await apiRequest.put<BaseApiSuccess<Chapter>>(`chapter/${id}`, body);
+
+  return data;
+};
+
+// remove DELETE
+const deleteChapterApi = async (id: string) => {
+  const {
+    data: { data },
+  } = await apiRequest.delete<BaseApiSuccess<Chapter>>(`chapter/${id}`);
 
   return data;
 };
@@ -42,4 +59,5 @@ export const chapterApi = {
   findAll: getChaptersApi,
   create: createChapterApi,
   edit: editChapterApi,
+  delete: deleteChapterApi,
 };
