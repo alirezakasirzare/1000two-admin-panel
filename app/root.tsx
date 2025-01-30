@@ -9,6 +9,8 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import { DirectionProvider } from "@radix-ui/react-direction";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -23,9 +25,18 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
+export function meta({}: Route.MetaArgs) {
+  return [
+    { title: "هزارتو" },
+    { name: "description", content: "بازی معمایی هزارتو" },
+  ];
+}
+
+const queryClient = new QueryClient();
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fa" dir="rtl">
+    <html lang="fa" dir="rtl" className="dark">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -33,7 +44,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
+        <QueryClientProvider client={queryClient}>
+          <DirectionProvider dir="rtl">{children}</DirectionProvider>
+        </QueryClientProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
