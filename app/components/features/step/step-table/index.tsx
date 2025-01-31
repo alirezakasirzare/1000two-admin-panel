@@ -2,13 +2,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { EllipsisVerticalIcon } from "lucide-react";
 import { useState } from "react";
 
-import { chapterApi } from "~/api/chapter";
 import { confirm } from "~/components/common/dialog-confirmation";
-import { chapterKeys } from "~/lib/query-key";
-import type { Chapter } from "~/lib/types";
-import { ChapterForm } from "../chapter-form";
+import { stepKeys } from "~/lib/query-key";
+import type { Step } from "~/lib/types";
 
-import { Link } from "react-router";
+import { stepApi } from "~/api/step";
 import {
   Dialog,
   DialogContent,
@@ -29,14 +27,15 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { StepForm } from "../step-form";
 
 // table row item component
-const TableItem = ({ chapter }: { chapter: Chapter }) => {
+const TableItem = ({ step }: { step: Step }) => {
   // dialog
   const [open, setOpen] = useState(false);
   const [dialogPurpose, setDialogPurpose] = useState<"view" | "edit">("view");
 
-  const dialogTitle = dialogPurpose === "view" ? "نمایش فصل" : "ویرایش فصل";
+  const dialogTitle = dialogPurpose === "view" ? "نمایش مرحله" : "ویرایش مرحله";
 
   // view
   const onViewClick = () => {
@@ -55,11 +54,11 @@ const TableItem = ({ chapter }: { chapter: Chapter }) => {
   const onDeleteClick = async () => {
     if (
       await confirm({
-        onConfirm: chapterApi.delete.bind(null, chapter.id),
+        onConfirm: stepApi.delete.bind(null, step.id),
       })
     ) {
       queryClient.invalidateQueries({
-        queryKey: chapterKeys.all,
+        queryKey: stepKeys.all,
       });
     }
   };
@@ -70,8 +69,8 @@ const TableItem = ({ chapter }: { chapter: Chapter }) => {
   };
   return (
     <TableRow>
-      <TableCell>{chapter.name}</TableCell>
-      <TableCell>{chapter.description}</TableCell>
+      <TableCell>{step.name}</TableCell>
+      <TableCell>{step.description}</TableCell>
       <TableCell>
         <Dialog open={open} onOpenChange={setOpen}>
           <DropdownMenu>
@@ -79,9 +78,6 @@ const TableItem = ({ chapter }: { chapter: Chapter }) => {
               <EllipsisVerticalIcon className="size-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem asChild>
-                <Link to={`/chapter/${chapter.id}/steps`}>مراحل</Link>
-              </DropdownMenuItem>
               <DropdownMenuItem onClick={onViewClick}>نمایش</DropdownMenuItem>
               <DropdownMenuItem onClick={onEditClick}>ویرایش</DropdownMenuItem>
               <DropdownMenuItem onClick={onDeleteClick}>حذف</DropdownMenuItem>
@@ -92,9 +88,9 @@ const TableItem = ({ chapter }: { chapter: Chapter }) => {
             <DialogHeader>
               <DialogTitle>{dialogTitle}</DialogTitle>
             </DialogHeader>
-            <ChapterForm
+            <StepForm
               mode={dialogPurpose}
-              initialValues={chapter}
+              initialValues={step}
               onSuccess={onDialogFormSuccess}
             />
           </DialogContent>
@@ -105,7 +101,7 @@ const TableItem = ({ chapter }: { chapter: Chapter }) => {
 };
 
 // the table component
-export const ChapterTable = ({ chapters }: { chapters: Chapter[] }) => {
+export const StepTable = ({ steps }: { steps: Step[] }) => {
   return (
     <Table>
       <TableHeader>
@@ -116,8 +112,8 @@ export const ChapterTable = ({ chapters }: { chapters: Chapter[] }) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {chapters.map((chapter) => (
-          <TableItem chapter={chapter} key={chapter.id} />
+        {steps.map((step) => (
+          <TableItem step={step} key={step.id} />
         ))}
       </TableBody>
     </Table>

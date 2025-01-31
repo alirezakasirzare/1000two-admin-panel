@@ -33,7 +33,7 @@ export const Sidebar = () => {
   ];
 
   return (
-    <aside className="w-[300px] shrink-0 bg-accent rounded-xl p-4">
+    <aside className="w-[300px] h-[calc(100vh-104px)] shrink-0 bg-accent rounded-xl p-4">
       {
         <ul className="flex flex-col gap-x-2">
           {items.map((item) => (

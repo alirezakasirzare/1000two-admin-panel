@@ -27,6 +27,10 @@ export type BaseApiPagination<T> = {
   };
 };
 
+export type PaginationQueryParams = {
+  page: number;
+};
+
 export type Chapter = {
   id: string;
   name: string;
@@ -35,6 +39,13 @@ export type Chapter = {
   updatedAt: Date;
 };
 
-export type PaginationQueryParams = {
-  page: number;
+export type Step = {
+  id: string;
+  name: string;
+  description: string;
+  question: string;
+  answer: string;
+  chapterId: string;
+  createdAt: Date;
+  updatedAt: Date;
 };

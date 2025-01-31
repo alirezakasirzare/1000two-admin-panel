@@ -42,6 +42,9 @@ export const DataPagination = ({
     setSearchParams(params);
   };
 
+  if (meta.currentPage === 1 && meta.nextPage === null) {
+    return null;
+  }
   return (
     <div className="flex items-center justify-center gap-x-2">
       <Button

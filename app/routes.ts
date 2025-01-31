@@ -7,5 +7,8 @@ import {
 
 export default [
   index("routes/login.tsx"),
-  layout("layouts/dashboard.tsx", [route("chapter", "routes/chapter.tsx")]),
+  layout("layouts/dashboard.tsx", [
+    route("chapter", "routes/chapter.tsx"),
+    route("chapter/:chapterId/steps", "routes/chapter-steps.tsx"),
+  ]),
 ] satisfies RouteConfig;
